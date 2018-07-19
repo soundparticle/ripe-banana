@@ -24,7 +24,7 @@ You need to set a good pace to get through the work in the allotted time.
 
 #### Entity Relationships
 
-![image](https://user-images.githubusercontent.com/478864/42962737-1d25f1e6-8b47-11e8-860b-e32c8205856e.png)
+![image](https://user-images.githubusercontent.com/478864/42962816-50e54248-8b47-11e8-9d3d-6c73a4b162e9.png)
 
 #### Directions Key
 * `<...>` is a placeholder for actual data.
