@@ -52,7 +52,7 @@ You need to set a good pace to get through the work in the allotted time.
   studio: <studio _id RI>,
   released: <4-digit year RN>,
   cast: [{
-    part: <name of character S>,
+    role: <name of character S>,
     actor: <actor _id RI>
   }]
 }
