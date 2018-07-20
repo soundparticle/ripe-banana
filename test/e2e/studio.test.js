@@ -37,5 +37,11 @@ describe('Studios API', () => {
         assert.isOk(universal._id);
     });
 
+    it('gets a studio by id', () => {
+        return request
+            .get(`/api/studios/${universal._id}`)
+            .then(checkOk);
+    });
+
 
 });
