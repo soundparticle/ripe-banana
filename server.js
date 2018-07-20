@@ -2,7 +2,7 @@ const http = require('http');
 const app = require('./lib/app');
 const connect = require('./lib/util/connect');
 
-connect('mongo://localhost:27017/ripe_banana_test');
+connect('mongo://localhost:27017/ripe_banana');
 
 const server = http.createServer(app);
 const port = process.env.port || 3000;
