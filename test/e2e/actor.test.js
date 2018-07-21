@@ -20,14 +20,6 @@ describe('Actors API', () => {
     let donJohnson;
 
     beforeEach(() => {
-        return request
-            .post('/api/actors')
-            .send({ name: 'Winona Ryder' })
-            .then(({ body }) => winonaRyder = body);
-    });
-
-
-    beforeEach(() => {
         return save({
             name: 'Winona Ryder',
             dob: new Date(1971, 9, 29),
@@ -51,5 +43,14 @@ describe('Actors API', () => {
 
     it('saves an actor', () => {
         assert.isOk(winonaRyder._id);
+    });
+
+    it('gets an actor by id', () => {
+        return request
+            .get(`/api/actors/${winonaRyder._id}`)
+            .then(checkOk)
+            .then(({ body }) => {
+                assert.deepEqual(body, winonaRyder);
+            });
     });
 });
