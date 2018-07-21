@@ -28,7 +28,7 @@ describe('Actors API', () => {
 
 
     beforeEach(() => {
-        return request({
+        return save({
             name: 'Winona Ryder',
             dob: new Date(1971, 9, 29),
             pob: 'MN'
