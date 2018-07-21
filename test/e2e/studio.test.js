@@ -33,15 +33,41 @@ describe('Studios API', () => {
             });
     });
 
+    beforeEach(() => {
+        return save({
+            name: 'Paramount',
+            address: {
+                city: 'Los Angeles',
+                state: 'CA',
+                country: 'USA'
+            }
+        })
+            .then(data => {
+                paramount = data;
+            });
+    });
+    
     it('saves a studio', () => {
         assert.isOk(universal._id);
     });
-
+    
     it('gets a studio by id', () => {
         return request
             .get(`/api/studios/${universal._id}`)
-            .then(checkOk);
+            .then(checkOk)
+            .then(({ body }) => {
+                assert.deepEqual(body, universal);
+            });
     });
 
+    it('get all studios', () => {
+        return request
+            .get('/api/studios')
+            .then(checkOk)
+            .then(({ body }) => {
+                assert.deepEqual(body, [universal, paramount]);
+            });
+    });
+    
 
 });
