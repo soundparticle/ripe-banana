@@ -57,5 +57,16 @@ describe('Reviewer API', () => {
             });
     });
 
+    it('updates a reviewer', () => {
+        tyrone.company = 'Very Bad Wizards';
+        return request
+            .put(`/api/reviewers/${tyrone._id}`)
+            .send(tyrone)
+            .then(checkOk)
+            .then(() => {
+                assert.equal(tyrone.company, 'Very Bad Wizards');
+            });
+    });
+
 
 });
