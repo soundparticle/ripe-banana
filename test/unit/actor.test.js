@@ -17,5 +17,10 @@ describe('Actor model', () => {
         assert.deepEqual(json, data);
         assert.isUndefined(actor.validateSync());
     });
-    
+
+    it('actor name is required', () => {
+        const actor = new Actor({});
+        const errors = getErrors(actor.validateSync(), 1); 
+        assert.equal(errors.name.kind, 'required');
+    });
 });
