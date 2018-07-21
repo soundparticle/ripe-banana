@@ -19,12 +19,12 @@ describe('Actors API', () => {
     let winonaRyder;
     let donJohnson;
 
-    // beforeEach(() => {
-    //     return request
-    //         .post('/api/actors')
-    //         .send({ name: 'Winona Ryder' })
-    //         .then(({ body }) => winonaRyder = body);
-    // });
+    beforeEach(() => {
+        return request
+            .post('/api/actors')
+            .send({ name: 'Winona Ryder' })
+            .then(({ body }) => winonaRyder = body);
+    });
 
 
     beforeEach(() => {
