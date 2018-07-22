@@ -53,4 +53,13 @@ describe('Actors API', () => {
                 assert.deepEqual(body, winonaRyder);
             });
     });
+
+    it('get all actors', () => {
+        return request  
+            .get('/api/actors')
+            .then(checkOk)
+            .then(({ body }) => {
+                assert.deepEqual(body, [winonaRyder, donJohnson]);
+            });
+    });
 });
