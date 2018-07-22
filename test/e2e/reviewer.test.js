@@ -3,7 +3,7 @@ const request = require('./request');
 const { dropCollection } = require('./db');
 const { checkOk } = request;
 
-describe('Reviewer API', () => {
+describe.skip('Reviewer API', () => {
 
     beforeEach(() => dropCollection('reviewers'));
 
