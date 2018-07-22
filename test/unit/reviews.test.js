@@ -20,5 +20,12 @@ describe('Review model', () => {
         assert.deepEqual(json, data);
     });
 
-    it()
+    it('validates required fields', () => {
+        const review = new Review({});
+        const errors = getErrors(review.validateSync(), 4);
+        assert.equal(errors.rating.kind, 'required');
+        assert.equal(errors.reviewer.kind, 'required');
+        assert.equal(errors.review.kind, 'required');
+        assert.equal(errors.film.kind, 'required');
+    });
 });
