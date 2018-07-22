@@ -22,8 +22,17 @@ describe('Film model', () => {
         const json = film.toJSON();
         delete json._id;
         json.cast.forEach(a => delete a._id);
-        console.log('***json***', json);
         assert.isUndefined(film.validateSync());
         assert.deepEqual(json, data);
     });
+
+    it('validates all required fields', () => {
+        const film = new Film({});
+        const errors = getErrors(film.validateSync(), 3);
+        assert.equal(errors.title.kind, 'required');
+        assert.equal(errors.studio.kind, 'required');
+        assert.equal(errors.released.kind, 'required');
+    });
+
+    
 });
