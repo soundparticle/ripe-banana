@@ -34,5 +34,16 @@ describe('Film model', () => {
         assert.equal(errors.released.kind, 'required');
     });
 
-    
+    it('validates actor id', () => {
+        const film = new Film({
+            title: 'Dracula',
+            studio: Types.ObjectId(),
+            released: 1992,
+            cast: [{
+                role: 'Mina Harker'
+            }]
+        });
+        const errors = getErrors(film.validateSync(), 1);
+        assert.equal(errors['cast.0.actor'].kind, 'required');
+    });
 });
