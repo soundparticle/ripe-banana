@@ -28,4 +28,28 @@ describe('Review model', () => {
         assert.equal(errors.review.kind, 'required');
         assert.equal(errors.film.kind, 'required');
     });
+
+    it('validates min rating', () => {
+        const review = new Review({
+            rating: 0,
+            reviewer: Types.ObjectId(),
+            review: 'I haven\'t seen this movie',
+            film: Types.ObjectId()
+        });
+        
+        const errors = getErrors(review.validateSync(), 1);
+        assert.equal(errors.rating.kind, 'min');
+    });
+
+    it('validates max rating', () => {
+        const review = new Review({
+            rating: 6,
+            reviewer: Types.ObjectId(),
+            review: 'I haven\'t seen this movie',
+            film: Types.ObjectId()
+        });
+        
+        const errors = getErrors(review.validateSync(), 1);
+        assert.equal(errors.rating.kind, 'max');
+    });
 });
