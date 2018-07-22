@@ -2,7 +2,7 @@ const { assert } = require('chai');
 const { getErrors } = require('./helpers');
 const Actor = require('../../lib/models/actor');
 
-describe.skip('Actor model', () => {
+describe('Actor model', () => {
 
     it('validates a good model', () => {
         const data = {
