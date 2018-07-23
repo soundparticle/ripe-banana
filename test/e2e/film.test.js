@@ -162,4 +162,18 @@ describe('Films API', () => {
                 assert.deepEqual(body, [dracula, machete]);
             });    
     });
+
+    it('deletes a film', () => {
+        return request
+            .delete(`/api/films/${dracula._id}`)
+            .then(checkOk)
+            .then(res => {
+                assert.deepEqual(res.body, { removed: true });
+                return request.get('/api/films');
+            })
+            .then(checkOk)
+            .then(({ body }) => {
+                assert.deepEqual(body.length, 1);
+            });
+    });
 });
