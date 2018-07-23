@@ -128,7 +128,6 @@ describe('Films API', () => {
     });
 
     it('gets all films', () => {
-
         return request
             .get('/api/films')
             .then(checkOk) 

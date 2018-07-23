@@ -3,7 +3,7 @@ const request = require('./request');
 const { dropCollection } = require('./db');
 const { Types } = require('mongoose');
 
-const { checkOk } = request;
+const { checkOk, simplify } = request;
 
 describe('Reviews API', () => {
     
@@ -167,5 +167,35 @@ describe('Reviews API', () => {
     it('saves a review', () => {
         assert.isOk(amazing._id);
         assert.isOk(horrible._id);
+    });
+
+    it('gets all reviews(up to a hundred)', () => {
+        return request
+            .get('/api/reviews')
+            .then(checkOk)
+            .then(({ body }) => {
+                body.forEach(e => {
+                    delete e.__v;
+                    delete e.updated_at;
+                    delete e.created_at;
+                });
+                
+                amazing = {
+                    _id: amazing._id,
+                    rating: amazing.rating,
+                    reviewer: simplify(tyrone),
+                    review: amazing.review,
+                    film: simplify(dracula)
+                };
+            
+                horrible = {
+                    _id: horrible._id,
+                    rating: horrible.rating,
+                    reviewer: simplify(chip),
+                    review: horrible.review,
+                    film: simplify(machete)
+                };
+                assert.deepEqual(body, [amazing, horrible]);
+            });
     });
 });
