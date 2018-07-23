@@ -62,4 +62,15 @@ describe('Actors API', () => {
                 assert.deepEqual(body, [winonaRyder, donJohnson]);
             });
     });
+
+    it('updates an actor', () => {
+        winonaRyder.pob = 'kleptoland';
+        return request
+            .put(`/api/actors/${winonaRyder._id}`)
+            .send(winonaRyder)
+            .then(checkOk)
+            .then(() => {
+                assert.equal(winonaRyder.pob, 'kleptoland');
+            });
+    });
 });
