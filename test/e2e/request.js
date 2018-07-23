@@ -12,6 +12,17 @@ request.checkOk = res => {
     return res;
 };
 
+request.simplify = data => {
+    const simple = { _id: data._id };
+    if(data.title) {
+        simple.title = data.title;
+    }
+    if(data.name) {
+        simple.name = data.name;
+    }
+    return simple;
+};
+
 after(done => server.close(done));
 
 module.exports = request;

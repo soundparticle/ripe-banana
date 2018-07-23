@@ -2,7 +2,7 @@ const { assert } = require('chai');
 const request = require('./request');
 const { dropCollection } = require('./db');
 
-const { checkOk } = request;
+const { checkOk, simplify } = request;
 
 describe('Films API', () => {
     
@@ -18,6 +18,10 @@ describe('Films API', () => {
             .send(film)
             .then(checkOk)
             .then(({ body }) => body);
+        // {
+        //     body.forach(n => delete n.__v);
+        //     return body;
+        // });
     }
 
     function saveStudio(studio) {
@@ -67,10 +71,23 @@ describe('Films API', () => {
                 winonaRyder = data;
             });
     });
+    let donJohnson;
+
+
+    beforeEach(() => {
+        return saveActor({
+            name: 'Don Johnson',
+            dob: new Date(1949, 11, 15),
+            pob: 'MO'
+        })
+            .then(data => {
+                donJohnson = data;
+            });
+    });
     
 
     let dracula;
-    // let machete;
+    let machete;
 
     
     beforeEach(() => {
@@ -86,18 +103,19 @@ describe('Films API', () => {
             .then(data => dracula = data);
     });
 
-    // beforeEach(() => {
-    //     return saveFilm({ 
-    //         title: 'Machete',
-    //         studio: Types.ObjectId,
-    //         released: 2010,
-    //         cast: [{
-    //             role: 'Von Jackson',
-    //             actor: Types.ObjectId
-    //         }]
-    //     })
-    //         .then(data => machete = data);
-    // });
+    beforeEach(() => {
+        return saveFilm({ 
+            title: 'Machete',
+            studio: universal._id,
+            released: 2010,
+            cast: [{
+                role: 'Von Jackson',
+                actor: donJohnson._id
+            }]
+        })
+            .then(data =>
+                machete = data);
+    });
 
     it('saves a film', () => {
         assert.isOk(dracula._id);
@@ -107,9 +125,46 @@ describe('Films API', () => {
         return request
             .get(`/api/films/${dracula._id}`)
             .then(checkOk)
-            .then(({ body })=> {
+            .then(({ body }) => {
                 assert.equal(body.studio.name, 'Universal');
                 assert.equal(body.cast[0].actor.name, 'Winona Ryder');
             });
+    });
+
+    it('gets all films', () => {
+
+        return request
+            .get('/api/films')
+            .then(checkOk) 
+            .then(({ body }) => {
+                body.forEach(e => {
+                    delete e.__v;
+                });
+                dracula = {
+                    _id: dracula._id,
+                    title: dracula.title,
+                    released: dracula.released,
+                    cast: [{
+                        _id: dracula.cast[0]._id,
+                        role: dracula.cast[0].role,
+                        actor: simplify(winonaRyder)
+                    }],
+                    studio: simplify(universal)
+                };
+                machete = {
+                    _id: machete._id,
+                    title: machete.title,
+                    released: machete.released,
+                    cast: [{
+                        _id: machete.cast[0]._id,
+                        role: machete.cast[0].role,
+                        actor: simplify(donJohnson)
+                    }],
+                    studio: simplify(universal)
+                };
+                
+
+                assert.deepEqual(body, [dracula, machete]);
+            });    
     });
 });
