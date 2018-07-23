@@ -1,7 +1,6 @@
 const { assert } = require('chai');
 const request = require('./request');
 const { dropCollection } = require('./db');
-const { Types } = require('mongoose');
 
 const { checkOk } = request;
 
@@ -75,7 +74,6 @@ describe('Films API', () => {
 
     
     beforeEach(() => {
-        console.log('*** winonaRyder._id ***', winonaRyder);
         return saveFilm({ 
             title: 'Dracula',
             studio: universal._id,
@@ -103,5 +101,15 @@ describe('Films API', () => {
 
     it('saves a film', () => {
         assert.isOk(dracula._id);
+    });
+
+    it('get a film by id', () => {
+        return request
+            .get(`/api/films/${dracula._id}`)
+            .then(checkOk)
+            .then(({ body })=> {
+                assert.equal(body.studio.name, 'Universal');
+                assert.equal(body.cast[0].actor.name, 'Winona Ryder');
+            });
     });
 });
