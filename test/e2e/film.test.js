@@ -18,10 +18,6 @@ describe('Films API', () => {
             .send(film)
             .then(checkOk)
             .then(({ body }) => body);
-        // {
-        //     body.forach(n => delete n.__v);
-        //     return body;
-        // });
     }
 
     function saveStudio(studio) {
