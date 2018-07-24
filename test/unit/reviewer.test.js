@@ -23,4 +23,4 @@ describe('Reviewer model', () => {
         assert.equal(errors.name.kind, 'required');
         assert.equal(errors.company.kind, 'required');
     });
-})
+});

@@ -67,6 +67,4 @@ describe('Reviewer API', () => {
                 assert.equal(tyrone.company, 'Very Bad Wizards');
             });
     });
-
-
 });

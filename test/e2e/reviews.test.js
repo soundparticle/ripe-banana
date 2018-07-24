@@ -1,8 +1,6 @@
 const { assert } = require('chai');
 const request = require('./request');
 const { dropCollection } = require('./db');
-const { Types } = require('mongoose');
-
 const { checkOk, simplify } = request;
 
 describe('Reviews API', () => {
@@ -65,8 +63,6 @@ describe('Reviews API', () => {
             .then(checkOk)
             .then(({ body }) => body);
     }
-
-
 
     beforeEach(() => {
         return saveActor({

@@ -1,7 +1,6 @@
 const { assert } = require('chai');
 const request = require('./request');
 const { dropCollection } = require('./db');
-
 const { checkOk, simplify } = request;
 
 describe('Films API', () => {
@@ -39,7 +38,6 @@ describe('Films API', () => {
 
     let universal;
 
-
     beforeEach(() => {
         return saveStudio({
             name: 'Universal',
@@ -56,7 +54,6 @@ describe('Films API', () => {
 
     let winonaRyder;
 
-
     beforeEach(() => {
         return saveActor({
             name: 'Winona Ryder',
@@ -69,7 +66,6 @@ describe('Films API', () => {
     });
     let donJohnson;
 
-
     beforeEach(() => {
         return saveActor({
             name: 'Don Johnson',
@@ -79,12 +75,10 @@ describe('Films API', () => {
             .then(data => {
                 donJohnson = data;
             });
-    });
-    
+    }); 
 
     let dracula;
     let machete;
-
     
     beforeEach(() => {
         return saveFilm({ 

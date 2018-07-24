@@ -1,7 +1,6 @@
 const { assert } = require('chai');
 const request = require('./request');
 const { dropCollection } = require('./db');
-
 const { checkOk } = request;
 
 describe('Actors API', () => {
@@ -87,5 +86,4 @@ describe('Actors API', () => {
                 assert.deepEqual(body.length, 1);
             });
     });
-    
 });
