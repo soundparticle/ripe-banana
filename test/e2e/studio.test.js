@@ -68,6 +68,18 @@ describe.skip('Studios API', () => {
                 assert.deepEqual(body, [universal, paramount]);
             });
     });
-    
 
+    it('deletes a studio', () => {
+        return request
+            .delete(`/api/studios/${universal._id}`)
+            .then(checkOk)
+            .then(res => {
+                assert.deepEqual(res.body, { removed: true });
+                return request.get('/api/studios');
+            })
+            .then(checkOk)
+            .then(({ body }) => {
+                assert.deepEqual(body.length, 1);
+            });
+    });
 });
