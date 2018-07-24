@@ -73,5 +73,19 @@ describe('Actors API', () => {
                 assert.equal(winonaRyder.pob, 'kleptoland');
             });
     });
+
+    it('deletes an actor', () => {
+        return request
+            .delete(`/api/actors/${donJohnson._id}`)
+            .then(checkOk)
+            .then(res => {
+                assert.deepEqual(res.body, { removed: true });
+                return request.get('/api/actors');
+            })
+            .then(checkOk)
+            .then(({ body }) => {
+                assert.deepEqual(body.length, 1);
+            });
+    });
     
 });
