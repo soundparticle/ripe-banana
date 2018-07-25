@@ -3,7 +3,7 @@ const request = require('./request');
 const { dropCollection } = require('./db');
 const { checkOk } = request;
 
-describe('Reviewer API', () => {
+describe.skip('Reviewer API', () => {
 
     beforeEach(() => dropCollection('reviewers'));
 
@@ -25,7 +25,6 @@ describe('Reviewer API', () => {
 
             email: 'tyrone@banana.com',
             password: 'abc123',
-            roles:[]
         })
             .then(data => tyrone = data);
     });
@@ -37,7 +36,7 @@ describe('Reviewer API', () => {
             
             email: 'chip@banana.com',
             password: 'abc123',
-            roles:[]
+            
         })
             .then(data => chip = data);
     });

@@ -13,8 +13,10 @@ describe('Auth API', () => {
         return request
             .post('/api/auth/signup')
             .send({
-                email: 'me@me.com',
-                password: 'abc'
+                name: 'chip Ellsworth III',
+                company: 'Fermented Banana',
+                email: 'chip@banana.com',
+                password: 'abc123'
             })
             .then(checkOk)
             .then(({ body }) => {
@@ -30,12 +32,21 @@ describe('Auth API', () => {
         return request
             .post('/api/auth/signin')
             .send({
-                email: 'me@me.com',
-                password: 'lame'
+                // name: 'chip Ellsworth III',
+                // company: 'Fermented Banana',
+                email: 'chip@banana.com',
+                password: 'abc123'
             })
             .then(checkOk)
             .then(({ body }) => {
                 assert.isDefined(body.token);
             });
+    });
+
+    it('verifies a token', () => {
+        return request
+            .get('/api/auth/verify')
+            .set('Authorization', token)
+            .then(checkOk);
     });
 });

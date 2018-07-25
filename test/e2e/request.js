@@ -23,6 +23,16 @@ request.simplify = data => {
     return simple;
 };
 
+request.getToken = () => request
+    .post('/api/auth/signup')
+    .send({
+        name: 'chip Ellsworth III',
+        company: 'Fermented Banana',
+        email: 'chip@banana.com',
+        password: 'abc123'
+    })
+    .then(({ body }) => body.token);
+
 after(done => server.close(done));
 
 module.exports = request;
