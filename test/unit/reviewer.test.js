@@ -6,12 +6,12 @@ describe('Reviewer model', () => {
 
     it('validates good model', () => {
         const data = {
+            name: 'Chip Ellsworth III',
+            company: 'Fermented Banana',
+            
             email: 'chip@banana.com',
             password:'abc123',
             roles: [],
-
-            name: 'Chip Ellsworth III',
-            company: 'Fermented Banana'
         };
         const chip = new Reviewer(data);
 

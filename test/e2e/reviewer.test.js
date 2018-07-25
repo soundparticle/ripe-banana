@@ -21,7 +21,11 @@ describe('Reviewer API', () => {
     beforeEach(() => {
         return save({
             name: 'Tyrone Payton',
-            company: 'Fermented Banana'
+            company: 'Fermented Banana',
+
+            email: 'tyrone@banana.com',
+            password: 'abc123',
+            roles:[]
         })
             .then(data => tyrone = data);
     });
@@ -29,7 +33,11 @@ describe('Reviewer API', () => {
     beforeEach(() => {
         return save({
             name: 'Chip Ellsworth III',
-            company: 'Fermented Banana'
+            company: 'Fermented Banana',
+            
+            email: 'chip@banana.com',
+            password: 'abc123',
+            roles:[]
         })
             .then(data => chip = data);
     });
