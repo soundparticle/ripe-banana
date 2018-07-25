@@ -3,13 +3,39 @@ const request = require('./request');
 const { dropCollection } = require('./db');
 const { checkOk } = request;
 
-describe.skip('Reviewer API', () => {
+describe('Reviewer API', () => {
 
     beforeEach(() => dropCollection('reviewers'));
 
+    let token;
+    beforeEach(() => {
+        return request
+            .post('/api/auth/signup')
+            .send({
+                name: 'Tyrone Payton',
+                company: 'Fermented Banana',
+
+                email: 'tyrone@banana.com',
+                password: 'abc123',
+            })
+            .then(checkOk)
+            .then(({ body }) => {
+                token = body.token;
+            });
+    });
+
+    it('signs up a user', () => {
+        assert.isDefined(token);
+    });
+
+
+
+
+    // old tests
     function save(reviewer) {
         return request
             .post('/api/reviewers')
+            .set('Authorization', token)
             .send(reviewer)
             .then(checkOk)
             .then(({ body }) => body);
@@ -40,6 +66,7 @@ describe.skip('Reviewer API', () => {
         })
             .then(data => chip = data);
     });
+
 
     it('saves a reviewer', () => {
         assert.isOk(chip._id);

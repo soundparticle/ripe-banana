@@ -32,8 +32,6 @@ describe('Auth API', () => {
         return request
             .post('/api/auth/signin')
             .send({
-                // name: 'chip Ellsworth III',
-                // company: 'Fermented Banana',
                 email: 'chip@banana.com',
                 password: 'abc123'
             })
