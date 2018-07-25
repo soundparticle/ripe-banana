@@ -76,23 +76,25 @@ describe('Reviewer API', () => {
         assert.isOk(tyrone._id);
     });
 
-    // it('gets a reviewer by id', () => {
-    //     return request
-    //         .get(`/api/reviewers/${chip._id}`)
-    //         .then(checkOk)
-    //         .then(({ body }) => {
-    //             assert.deepEqual(body, chip);
-    //         });
-    // });
+    it('gets a reviewer by id', () => {
+        return request
+            .get(`/api/reviewers/${tyrone._id}`)
+            .set('Authorization', token)
+            .then(checkOk)
+            .then(({ body }) => {
+                assert.deepEqual(body, tyrone);
+            });
+    });
 
-    // it('gets all reviewers', () => {
-    //     return request
-    //         .get('/api/reviewers')
-    //         .then(checkOk)
-    //         .then(({ body }) => {
-    //             assert.deepEqual(body, [tyrone, chip]);
-    //         });
-    // });
+    it('gets all reviewers', () => {
+        return request
+            .get('/api/reviewers')
+            .set('Authorization', token)
+            .then(checkOk)
+            .then(({ body }) => {
+                assert.deepEqual(body, [tyrone]);
+            });
+    });
 
     // it('updates a reviewer', () => {
     //     tyrone.company = 'Very Bad Wizards';
