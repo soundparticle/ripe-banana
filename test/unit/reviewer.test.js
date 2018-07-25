@@ -32,9 +32,11 @@ describe('Reviewer model', () => {
         assert.isFalse(chip.comparePassword('bad password'), 'compare bad password');
     });
 
-    it.skip('name and company are required', () => {
+    it('email, hash, name and company are required', () => {
         const tyrone = new Reviewer({});
-        const errors = getErrors(tyrone.validateSync(), 2);
+        const errors = getErrors(tyrone.validateSync(), 4);
+        assert.equal(errors.email.kind, 'required');
+        assert.equal(errors.hash.kind, 'required');
         assert.equal(errors.name.kind, 'required');
         assert.equal(errors.company.kind, 'required');
     });
