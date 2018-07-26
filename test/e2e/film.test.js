@@ -9,11 +9,11 @@ describe('Films API', () => {
         dropCollection('films');
         dropCollection('studios');
         dropCollection('actors');
-        dropCollection('review');
-        dropCollection('reviewer');
+        dropCollection('reviews');
+        dropCollection('reviewers');
     });
 
-    let amazing, horrible;
+    let amazing;
     let winonaRyder, donJohnson;
     let universal;
     let dracula, machete;

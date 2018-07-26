@@ -3,11 +3,25 @@ const request = require('./request');
 const { dropCollection } = require('./db');
 const { checkOk } = request;
 
-describe('Reviewer API', () => {
+describe.only('Reviewer API', () => {
 
-    beforeEach(() => dropCollection('reviewers'));
+    beforeEach(() => {
+        dropCollection('films');
+        dropCollection('studios');
+        dropCollection('actors');
+        dropCollection('reviews');
+        dropCollection('reviewers');
+    });
 
-    function save(reviewer) {
+    let amazing, horrible;
+    let winonaRyder, donJohnson;
+    let universal;
+    let dracula, machete;
+    let chip, tyrone;
+
+    //*** save reviewer function ***
+
+    function saveReviewer(reviewer) {
         return request
             .post('/api/reviewers')
             .send(reviewer)
@@ -15,24 +29,143 @@ describe('Reviewer API', () => {
             .then(({ body }) => body);
     }
 
-    let tyrone;
-    let chip;
+    //*** save film function ***
+
+    function saveFilm(film) {
+        return request
+            .post('/api/films')
+            .send(film)
+            .then(checkOk)
+            .then(({ body }) => body);
+    }
+
+    //*** save review function ***
+
+    function saveReview(review) {
+        return request
+            .post('/api/reviews')
+            .send(review)
+            // .then(() => console.log('***review***', review))
+            .then(checkOk)
+            .then(({ body }) => body);
+    }
+
+    //*** save actor function
+
+    function saveActor(actor) {
+        return request
+            .post('/api/actors')
+            .send(actor)
+            .then(checkOk)
+            .then(({ body }) => body);
+    }
+
+    //*** save a studio function
+
+    function saveStudio(studio) {
+        return request
+            .post('/api/studios')
+            .send(studio)
+            .then(checkOk)
+            .then(({ body }) => body);
+    }
 
     beforeEach(() => {
-        return save({
+        return saveActor({
+            name: 'Winona Ryder',
+            dob: new Date(1971, 9, 29),
+            pob: 'MN'
+        })
+            .then(data => winonaRyder = data);
+    });
+
+    beforeEach(() => {
+        return saveActor({
+            name:'Don Johnson',
+            dob: new Date(1949, 11, 15),
+            pob: 'MO'
+        })
+            .then(data => donJohnson = data);
+    });
+
+    beforeEach(() => {
+        return saveStudio({
+            name: 'Universal',
+            address: {
+                city: 'Los Angeles',
+                state: 'CA',
+                country: 'USA'
+            }
+        })
+            .then(data => universal = data);
+
+    });
+
+    beforeEach(() => {
+        return saveFilm({ 
+            title: 'Dracula',
+            studio: universal._id,
+            released: 1992,
+            cast: [{
+                role: 'Mina Harker',
+                actor: winonaRyder._id
+            }]
+        })
+            .then(data => dracula = data);
+    });
+
+    beforeEach(() => {
+        return saveFilm({ 
+            title: 'Machete',
+            studio: universal._id,
+            released: 2010,
+            cast: [{
+                role: 'Von Jackson',
+                actor: donJohnson._id
+            }]
+        })
+            .then(data =>
+                machete = data);
+    });
+
+    beforeEach(() => {
+        return saveReviewer({
             name: 'Tyrone Payton',
             company: 'Fermented Banana'
         })
             .then(data => tyrone = data);
     });
-
+    
     beforeEach(() => {
-        return save({
+        return saveReviewer({
             name: 'Chip Ellsworth III',
             company: 'Fermented Banana'
         })
             .then(data => chip = data);
     });
+
+    beforeEach(() => {
+        return saveReview({
+            rating: 5,
+            reviewer: tyrone._id,
+            review: 'This is amazing',
+            film: dracula._id
+        })
+            .then(data =>  amazing = data);
+    });
+
+    beforeEach(() => {
+        return saveReview({
+            rating: 1,
+            reviewer: chip._id,
+            review: 'This is horrible',
+            film: machete._id
+        })
+            .then(data => {
+                horrible = data;
+            });
+    });
+
 
     it('saves a reviewer', () => {
         assert.isOk(chip._id);
@@ -40,11 +173,23 @@ describe('Reviewer API', () => {
     });
 
     it('gets a reviewer by id', () => {
+        const reviewer = {
+            _id: chip._id,
+            name: 'Chip Ellsworth III',
+            company: 'Fermented Banana',
+            reviews: [{ 
+                _id: horrible._id,
+                rating: 1,
+                review: 'This is horrible',
+                film: { _id: machete._id, title: 'Machete' } 
+            }] 
+        };
+
         return request
             .get(`/api/reviewers/${chip._id}`)
             .then(checkOk)
             .then(({ body }) => {
-                assert.deepEqual(body, chip);
+                assert.deepEqual(body, reviewer);
             });
     });
 

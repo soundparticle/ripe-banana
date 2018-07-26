@@ -4,7 +4,7 @@ const { dropCollection  } = require('./db');
 
 const { checkOk } = request;
 
-describe.only('Studios API', () => {
+describe('Studios API', () => {
 
     beforeEach(() => {
         dropCollection('films');
