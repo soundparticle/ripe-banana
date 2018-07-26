@@ -9,7 +9,27 @@ describe('Films API', () => {
         dropCollection('films');
         dropCollection('studios');
         dropCollection('actors');
+        dropCollection('reviews');
+        dropCollection('reviewers');
     });
+
+    let amazing;
+    let winonaRyder, donJohnson;
+    let universal;
+    let dracula, machete;
+    let tyrone;
+
+    //*** save reviewer function ***
+
+    function saveReviewer(reviewer) {
+        return request
+            .post('/api/reviewers')
+            .send(reviewer)
+            .then(checkOk)
+            .then(({ body }) => body);
+    }
+
+    //*** save film function ***
 
     function saveFilm(film) {
         return request
@@ -19,13 +39,18 @@ describe('Films API', () => {
             .then(({ body }) => body);
     }
 
-    function saveStudio(studio) {
+    //*** save review function ***
+
+    function saveReview(review) {
         return request
-            .post('/api/studios')
-            .send(studio)
+            .post('/api/reviews')
+            .send(review)
+            // .then(() => console.log('***review***', review))
             .then(checkOk)
             .then(({ body }) => body);
     }
+
+    //*** save actor function
 
     function saveActor(actor) {
         return request
@@ -34,9 +59,34 @@ describe('Films API', () => {
             .then(checkOk)
             .then(({ body }) => body);
     }
-    // Save a studio and then an actor
 
-    let universal;
+    //*** save a studio function
+
+    function saveStudio(studio) {
+        return request
+            .post('/api/studios')
+            .send(studio)
+            .then(checkOk)
+            .then(({ body }) => body);
+    }
+
+    beforeEach(() => {
+        return saveActor({
+            name: 'Winona Ryder',
+            dob: new Date(1971, 9, 29),
+            pob: 'MN'
+        })
+            .then(data => winonaRyder = data);
+    });
+
+    beforeEach(() => {
+        return saveActor({
+            name:'Don Johnson',
+            dob: new Date(1949, 11, 15),
+            pob: 'MO'
+        })
+            .then(data => donJohnson = data);
+    });
 
     beforeEach(() => {
         return saveStudio({
@@ -47,39 +97,10 @@ describe('Films API', () => {
                 country: 'USA'
             }
         })
-            .then(data => {
-                universal = data;
-            });
+            .then(data => universal = data);
+
     });
 
-    let winonaRyder;
-
-    beforeEach(() => {
-        return saveActor({
-            name: 'Winona Ryder',
-            dob: new Date(1971, 9, 29),
-            pob: 'MN'
-        })
-            .then(data => {
-                winonaRyder = data;
-            });
-    });
-    let donJohnson;
-
-    beforeEach(() => {
-        return saveActor({
-            name: 'Don Johnson',
-            dob: new Date(1949, 11, 15),
-            pob: 'MO'
-        })
-            .then(data => {
-                donJohnson = data;
-            });
-    }); 
-
-    let dracula;
-    let machete;
-    
     beforeEach(() => {
         return saveFilm({ 
             title: 'Dracula',
@@ -107,17 +128,48 @@ describe('Films API', () => {
                 machete = data);
     });
 
+    beforeEach(() => {
+        return saveReviewer({
+            name: 'Tyrone Payton',
+            company: 'Fermented Banana'
+        })
+            .then(data => tyrone = data);
+    });
+    
+    beforeEach(() => {
+        return saveReview({
+            rating: 5,
+            reviewer: tyrone._id,
+            review: 'This is amazing',
+            film: dracula._id
+        })
+            .then(data =>  amazing = data);
+    });
+
     it('saves a film', () => {
         assert.isOk(dracula._id);
     });
 
     it('get a film by id', () => {
+        const film = { 
+            _id: dracula._id,
+            title: 'Dracula',
+            studio: { _id: universal._id, name: 'Universal' },
+            released: 1992,
+            cast:
+                [{ _id: dracula.cast[0]._id,
+                    role: 'Mina Harker',
+                    actor: { _id: winonaRyder._id, name: 'Winona Ryder' } }],
+            reviews:
+                [{ _id: amazing._id,
+                    rating: 5,
+                    reviewer: { _id: tyrone._id, name: 'Tyrone Payton' },
+                    review: 'This is amazing' }] };
         return request
             .get(`/api/films/${dracula._id}`)
             .then(checkOk)
             .then(({ body }) => {
-                assert.equal(body.studio.name, 'Universal');
-                assert.equal(body.cast[0].actor.name, 'Winona Ryder');
+                assert.deepEqual(body, film);
             });
     });
 
@@ -126,29 +178,16 @@ describe('Films API', () => {
             .get('/api/films')
             .then(checkOk) 
             .then(({ body }) => {
-                body.forEach(e => {
-                    delete e.__v;
-                });
                 dracula = {
                     _id: dracula._id,
                     title: dracula.title,
                     released: dracula.released,
-                    cast: [{
-                        _id: dracula.cast[0]._id,
-                        role: dracula.cast[0].role,
-                        actor: simplify(winonaRyder)
-                    }],
                     studio: simplify(universal)
                 };
                 machete = {
                     _id: machete._id,
                     title: machete.title,
                     released: machete.released,
-                    cast: [{
-                        _id: machete.cast[0]._id,
-                        role: machete.cast[0].role,
-                        actor: simplify(donJohnson)
-                    }],
                     studio: simplify(universal)
                 };
                 

@@ -5,7 +5,7 @@ const { checkOk } = request;
 
 describe('Reviewer API', () => {
 
-    beforeEach(() => dropCollection('reviewers'));
+  beforeEach(() => dropCollection('reviewers'));
    
     
     let token;
@@ -66,7 +66,7 @@ describe('Reviewer API', () => {
     //     })
     //         .then(data => chip = data);
     // });
-
+  
 
     it('saves a reviewer', () => {
         // assert.isOk(chip._id);
@@ -74,13 +74,25 @@ describe('Reviewer API', () => {
     });
 
     it('gets a reviewer by id', () => {
+        const reviewer = {
+            _id: chip._id,
+            name: 'Chip Ellsworth III',
+            company: 'Fermented Banana',
+            reviews: [{ 
+                _id: horrible._id,
+                rating: 1,
+                review: 'This is horrible',
+                film: { _id: machete._id, title: 'Machete' } 
+            }] 
+        };
+
         return request
             .get(`/api/reviewers/${tyrone._id}`)
             .set('Authorization', token)
             .then(checkOk)
             .then(({ body }) => {
                 assert.deepEqual(body, tyrone);
-            });
+        });
     });
 
     it('gets all reviewers', () => {
