@@ -6,6 +6,7 @@ const { checkOk, simplify } = request;
 describe('Reviews API', () => {
     
     beforeEach(() => dropCollection('reviews'));
+    beforeEach(() => dropCollection('reviewers'));
 
     let token;
     let tyrone;
@@ -21,7 +22,7 @@ describe('Reviews API', () => {
             })
             .then(checkOk)
             .then(({ body }) => {
-                // console.log('** body **', body);
+                console.log('** body **', body);
                 token = body.token;
                 tyrone = body.reviewer;
             });

@@ -6,7 +6,8 @@ const { checkOk } = request;
 describe('Reviewer API', () => {
 
     beforeEach(() => dropCollection('reviewers'));
-
+   
+    
     let token;
     let tyrone;
     beforeEach(() => {
@@ -21,7 +22,6 @@ describe('Reviewer API', () => {
             })
             .then(checkOk)
             .then(({ body }) => {
-                // console.log('** body **', body);
                 token = body.token;
                 tyrone = body.reviewer;
             });
@@ -30,9 +30,6 @@ describe('Reviewer API', () => {
     it('signs up a user', () => {
         assert.isDefined(token);
     });
-
-
-
 
     // old tests
     // function save(reviewer) {
