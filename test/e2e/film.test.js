@@ -17,7 +17,7 @@ describe('Films API', () => {
     let winonaRyder, donJohnson;
     let universal;
     let dracula, machete;
-    let chip, tyrone;
+    let tyrone;
 
     //*** save reviewer function ***
 
@@ -137,14 +137,6 @@ describe('Films API', () => {
     });
     
     beforeEach(() => {
-        return saveReviewer({
-            name: 'Chip Ellsworth III',
-            company: 'Fermented Banana'
-        })
-            .then(data => chip = data);
-    });
-
-    beforeEach(() => {
         return saveReview({
             rating: 5,
             reviewer: tyrone._id,
@@ -152,18 +144,6 @@ describe('Films API', () => {
             film: dracula._id
         })
             .then(data =>  amazing = data);
-    });
-
-    beforeEach(() => {
-        return saveReview({
-            rating: 1,
-            reviewer: chip._id,
-            review: 'This is horrible',
-            film: machete._id
-        })
-            .then(data => {
-                horrible = data;
-            });
     });
 
     it('saves a film', () => {

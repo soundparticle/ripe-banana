@@ -9,8 +9,8 @@ describe('Reviews API', () => {
         dropCollection('films');
         dropCollection('studios');
         dropCollection('actors');
-        dropCollection('review');
-        dropCollection('reviewer');
+        dropCollection('reviews');
+        dropCollection('reviewers');
     });
 
     let amazing, horrible;

@@ -3,7 +3,7 @@ const request = require('./request');
 const { dropCollection } = require('./db');
 const { checkOk } = request;
 
-describe.only('Reviewer API', () => {
+describe('Reviewer API', () => {
 
     beforeEach(() => {
         dropCollection('films');
@@ -13,10 +13,10 @@ describe.only('Reviewer API', () => {
         dropCollection('reviewers');
     });
 
-    let amazing, horrible;
-    let winonaRyder, donJohnson;
+    let horrible;
+    let donJohnson;
     let universal;
-    let dracula, machete;
+    let machete;
     let chip, tyrone;
 
     //*** save reviewer function ***
@@ -72,15 +72,6 @@ describe.only('Reviewer API', () => {
 
     beforeEach(() => {
         return saveActor({
-            name: 'Winona Ryder',
-            dob: new Date(1971, 9, 29),
-            pob: 'MN'
-        })
-            .then(data => winonaRyder = data);
-    });
-
-    beforeEach(() => {
-        return saveActor({
             name:'Don Johnson',
             dob: new Date(1949, 11, 15),
             pob: 'MO'
@@ -99,19 +90,6 @@ describe.only('Reviewer API', () => {
         })
             .then(data => universal = data);
 
-    });
-
-    beforeEach(() => {
-        return saveFilm({ 
-            title: 'Dracula',
-            studio: universal._id,
-            released: 1992,
-            cast: [{
-                role: 'Mina Harker',
-                actor: winonaRyder._id
-            }]
-        })
-            .then(data => dracula = data);
     });
 
     beforeEach(() => {
@@ -142,16 +120,6 @@ describe.only('Reviewer API', () => {
             company: 'Fermented Banana'
         })
             .then(data => chip = data);
-    });
-
-    beforeEach(() => {
-        return saveReview({
-            rating: 5,
-            reviewer: tyrone._id,
-            review: 'This is amazing',
-            film: dracula._id
-        })
-            .then(data =>  amazing = data);
     });
 
     beforeEach(() => {
