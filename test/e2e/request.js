@@ -7,7 +7,7 @@ const app = require('../../lib/app');
 const server = createServer(app);
 const request = chai.request(server).keepOpen();
 request.checkOk = res => {
-    // console.log('*** res ***', res.body);
+    // console.log('*** res.body ***', res.body);
     if(res.status !== 200) throw new Error('expected 200 http status code');
     return res;
 };

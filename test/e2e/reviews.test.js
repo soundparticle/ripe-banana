@@ -3,7 +3,7 @@ const request = require('./request');
 const { dropCollection } = require('./db');
 const { checkOk, simplify } = request;
 
-describe.skip('Reviews API', () => {
+describe('Reviews API', () => {
     
     beforeEach(() => dropCollection('reviews'));
     beforeEach(() => dropCollection('reviewers'));
@@ -30,12 +30,11 @@ describe.skip('Reviews API', () => {
     
     
     // OLD CODE
-    
+    // let chip;
     let amazing, horrible;
     let winonaRyder, donJohnson;
     let universal;
     let dracula, machete;
-    let chip;
 
     //*** save reviewer function ***
 
@@ -66,7 +65,6 @@ describe.skip('Reviews API', () => {
             .post('/api/reviews')
             .set('Authorization', token)
             .send(review)
-            .then(() => console.log('***review***', review))
             .then(checkOk)
             .then(({ body }) => body);
     }
@@ -147,7 +145,7 @@ describe.skip('Reviews API', () => {
                 actor: donJohnson._id
             }]
         })
-            .then(data =>machete = data);
+            .then(data => machete = data);
     });
 
     // beforeEach(() => {
@@ -175,23 +173,33 @@ describe.skip('Reviews API', () => {
         })
             .then(data =>  amazing = data);
     });
-
     beforeEach(() => {
         return saveReview({
             rating: 1,
-            reviewer: chip._id,
+            reviewer: tyrone._id,
             review: 'This is horrible',
             film: machete._id
         })
             .then(data => horrible = data);
     });
 
+    // beforeEach(() => {
+    //     return saveReview({
+    //         rating: 1,
+    //         reviewer: chip._id,
+    //         review: 'This is horrible',
+    //         film: machete._id
+    //     })
+    //         .then(data => horrible = data);
+    // });
+
     it('saves a review', () => {
+        console.log('** amazing._id **', amazing._id);
         assert.isOk(amazing._id);
-        // assert.isOk(horrible._id);
+        assert.isOk(horrible._id);
     });
 
-    it.skip('gets all reviews(up to a hundred)', () => {
+    it('gets all reviews(up to a hundred)', () => {
         return request
             .get('/api/reviews')
             .then(checkOk)
@@ -213,7 +221,7 @@ describe.skip('Reviews API', () => {
                 horrible = {
                     _id: horrible._id,
                     rating: horrible.rating,
-                    reviewer: simplify(chip),
+                    reviewer: simplify(tyrone),
                     review: horrible.review,
                     film: simplify(machete)
                 };
