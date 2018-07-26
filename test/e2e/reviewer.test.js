@@ -35,14 +35,14 @@ describe('Reviewer API', () => {
 
 
     // old tests
-    function save(reviewer) {
-        return request
-            .post('/api/reviewers')
-            .set('Authorization', token)
-            .send(reviewer)
-            .then(checkOk)
-            .then(({ body }) => body);
-    }
+    // function save(reviewer) {
+    //     return request
+    //         .post('/api/reviewers')
+    //         .set('Authorization', token)
+    //         .send(reviewer)
+    //         .then(checkOk)
+    //         .then(({ body }) => body);
+    // }
 
     // let tyrone;
     // let chip;
@@ -96,14 +96,15 @@ describe('Reviewer API', () => {
             });
     });
 
-    // it('updates a reviewer', () => {
-    //     tyrone.company = 'Very Bad Wizards';
-    //     return request
-    //         .put(`/api/reviewers/${tyrone._id}`)
-    //         .send(tyrone)
-    //         .then(checkOk)
-    //         .then(() => {
-    //             assert.equal(tyrone.company, 'Very Bad Wizards');
-    //         });
-    // });
+    it('updates a reviewer', () => {
+        tyrone.company = 'Very Bad Wizards';
+        return request
+            .put(`/api/reviewers/${tyrone._id}`)
+            .set('Authorization', token)
+            .send(tyrone)
+            .then(checkOk)
+            .then(() => {
+                assert.equal(tyrone.company, 'Very Bad Wizards');
+            });
+    });
 });

@@ -3,10 +3,33 @@ const request = require('./request');
 const { dropCollection } = require('./db');
 const { checkOk, simplify } = request;
 
-describe.skip('Reviews API', () => {
+describe('Reviews API', () => {
     
     beforeEach(() => dropCollection('reviews'));
 
+    let token;
+    let tyrone;
+    beforeEach(() => {
+        return request
+            .post('/api/auth/signup')
+            .send({
+                name: 'Tyrone Payton',
+                company: 'Fermented Banana',
+
+                email: 'tyrone@banana.com',
+                password: 'abc123',
+            })
+            .then(checkOk)
+            .then(({ body }) => {
+                // console.log('** body **', body);
+                token = body.token;
+                tyrone = body.reviewer;
+            });
+    });
+    
+    
+    // OLD CODE
+    
     let amazing, horrible;
     let winonaRyder, donJohnson;
     let universal;
@@ -15,13 +38,14 @@ describe.skip('Reviews API', () => {
 
     //*** save reviewer function ***
 
-    function saveReviewer(reviewer) {
-        return request
-            .post('/api/reviewers')
-            .send(reviewer)
-            .then(checkOk)
-            .then(({ body }) => body);
-    }
+    // function saveReviewer(reviewer) {
+    //     return request
+    //         .post('/api/reviewers')
+    //         // .set('Authorization', token)
+    //         .send(reviewer)
+    //         .then(checkOk)
+    //         .then(({ body }) => body);
+    // }
 
     //*** save film function ***
 
