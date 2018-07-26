@@ -4,7 +4,7 @@ const { dropCollection  } = require('./db');
 
 const { checkOk } = request;
 
-describe('Studios API', () => {
+describe.only('Studios API', () => {
 
     beforeEach(() => dropCollection('studios'));
 
@@ -65,7 +65,8 @@ describe('Studios API', () => {
             .get('/api/studios')
             .then(checkOk)
             .then(({ body }) => {
-                assert.deepEqual(body, [universal, paramount]);
+                body.forEach(i => delete i._id);
+                assert.deepEqual(body, [{ name: 'Universal' }, { name: 'Paramount' }]);
             });
     });
 
