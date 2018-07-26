@@ -5,7 +5,13 @@ const { checkOk, simplify } = request;
 
 describe('Reviews API', () => {
     
-    beforeEach(() => dropCollection('reviews'));
+    beforeEach(() => {
+        dropCollection('films');
+        dropCollection('studios');
+        dropCollection('actors');
+        dropCollection('reviews');
+        dropCollection('reviewers');
+    });
 
     let amazing, horrible;
     let winonaRyder, donJohnson;
