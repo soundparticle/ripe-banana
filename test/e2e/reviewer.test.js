@@ -5,138 +5,71 @@ const { checkOk } = request;
 
 describe('Reviewer API', () => {
 
-    beforeEach(() => {
-        dropCollection('films');
-        dropCollection('studios');
-        dropCollection('actors');
-        dropCollection('reviews');
-        dropCollection('reviewers');
-    });
-
-    let horrible;
-    let donJohnson;
-    let universal;
-    let machete;
-    let chip, tyrone;
-
-    //*** save reviewer function ***
-
-    function saveReviewer(reviewer) {
-        return request
-            .post('/api/reviewers')
-            .send(reviewer)
-            .then(checkOk)
-            .then(({ body }) => body);
-    }
-
-    //*** save film function ***
-
-    function saveFilm(film) {
-        return request
-            .post('/api/films')
-            .send(film)
-            .then(checkOk)
-            .then(({ body }) => body);
-    }
-
-    //*** save review function ***
-
-    function saveReview(review) {
-        return request
-            .post('/api/reviews')
-            .send(review)
-            // .then(() => console.log('***review***', review))
-            .then(checkOk)
-            .then(({ body }) => body);
-    }
-
-    //*** save actor function
-
-    function saveActor(actor) {
-        return request
-            .post('/api/actors')
-            .send(actor)
-            .then(checkOk)
-            .then(({ body }) => body);
-    }
-
-    //*** save a studio function
-
-    function saveStudio(studio) {
-        return request
-            .post('/api/studios')
-            .send(studio)
-            .then(checkOk)
-            .then(({ body }) => body);
-    }
-
-    beforeEach(() => {
-        return saveActor({
-            name:'Don Johnson',
-            dob: new Date(1949, 11, 15),
-            pob: 'MO'
-        })
-            .then(data => donJohnson = data);
-    });
-
-    beforeEach(() => {
-        return saveStudio({
-            name: 'Universal',
-            address: {
-                city: 'Los Angeles',
-                state: 'CA',
-                country: 'USA'
-            }
-        })
-            .then(data => universal = data);
-
-    });
-
-    beforeEach(() => {
-        return saveFilm({ 
-            title: 'Machete',
-            studio: universal._id,
-            released: 2010,
-            cast: [{
-                role: 'Von Jackson',
-                actor: donJohnson._id
-            }]
-        })
-            .then(data =>
-                machete = data);
-    });
-
-    beforeEach(() => {
-        return saveReviewer({
-            name: 'Tyrone Payton',
-            company: 'Fermented Banana'
-        })
-            .then(data => tyrone = data);
-    });
+  beforeEach(() => dropCollection('reviewers'));
+   
     
+    let token;
+    let tyrone;
     beforeEach(() => {
-        return saveReviewer({
-            name: 'Chip Ellsworth III',
-            company: 'Fermented Banana'
-        })
-            .then(data => chip = data);
-    });
+        return request
+            .post('/api/auth/signup')
+            .send({
+                name: 'Tyrone Payton',
+                company: 'Fermented Banana',
 
-    beforeEach(() => {
-        return saveReview({
-            rating: 1,
-            reviewer: chip._id,
-            review: 'This is horrible',
-            film: machete._id
-        })
-            .then(data => {
-                horrible = data;
+                email: 'tyrone@banana.com',
+                password: 'abc123',
+            })
+            .then(checkOk)
+            .then(({ body }) => {
+                token = body.token;
+                tyrone = body.reviewer;
             });
     });
 
+    it('signs up a user', () => {
+        assert.isDefined(token);
+    });
+
+    // old tests
+    // function save(reviewer) {
+    //     return request
+    //         .post('/api/reviewers')
+    //         .set('Authorization', token)
+    //         .send(reviewer)
+    //         .then(checkOk)
+    //         .then(({ body }) => body);
+    // }
+
+    // let tyrone;
+    // let chip;
+
+    // beforeEach(() => {
+    //     return save({
+    //         name: 'Tyrone Payton',
+    //         company: 'Fermented Banana',
+
+    //         email: 'tyrone@banana.com',
+    //         password: 'abc123',
+    //     })
+    //         .then(data => tyrone = data);
+    // });
+
+    // beforeEach(() => {
+    //     return save({
+    //         name: 'Chip Ellsworth III',
+    //         company: 'Fermented Banana',
+            
+    //         email: 'chip@banana.com',
+    //         password: 'abc123',
+            
+    //     })
+    //         .then(data => chip = data);
+    // });
+  
 
     it('saves a reviewer', () => {
-        assert.isOk(chip._id);
+        // assert.isOk(chip._id);
         assert.isOk(tyrone._id);
     });
 
@@ -154,19 +87,21 @@ describe('Reviewer API', () => {
         };
 
         return request
-            .get(`/api/reviewers/${chip._id}`)
+            .get(`/api/reviewers/${tyrone._id}`)
+            .set('Authorization', token)
             .then(checkOk)
             .then(({ body }) => {
-                assert.deepEqual(body, reviewer);
-            });
+                assert.deepEqual(body, tyrone);
+        });
     });
 
     it('gets all reviewers', () => {
         return request
             .get('/api/reviewers')
+            .set('Authorization', token)
             .then(checkOk)
             .then(({ body }) => {
-                assert.deepEqual(body, [tyrone, chip]);
+                assert.deepEqual(body, [tyrone]);
             });
     });
 
@@ -174,6 +109,7 @@ describe('Reviewer API', () => {
         tyrone.company = 'Very Bad Wizards';
         return request
             .put(`/api/reviewers/${tyrone._id}`)
+            .set('Authorization', token)
             .send(tyrone)
             .then(checkOk)
             .then(() => {
