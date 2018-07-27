@@ -3,9 +3,28 @@ const request = require('./request');
 const { dropCollection } = require('./db');
 const { checkOk } = request;
 
-describe('Actors API', () => {
+describe.only('Actors API', () => {
 
     beforeEach(() => dropCollection('actors'));
+    beforeEach(() => dropCollection('reviewers'));
+
+    let token;
+    beforeEach(() => {
+        return request
+            .post('/api/auth/signup')
+            .send({
+                name: 'Tyrone Payton',
+                company: 'Fermented Banana',
+
+                email: 'tyrone@banana.com',
+                password: 'abc123',
+            })
+            .then(checkOk)
+            .then(({ body }) => {
+                console.log('** body **', body);
+                token = body.token;
+            });
+    });
 
     function save(actor) {
         return request
@@ -41,12 +60,14 @@ describe('Actors API', () => {
     });
 
     it('saves an actor', () => {
+        console.log('** winona **', winonaRyder);
         assert.isOk(winonaRyder._id);
     });
 
     it('gets an actor by id', () => {
         return request
             .get(`/api/actors/${winonaRyder._id}`)
+            .set('Authorization', token)
             .then(checkOk)
             .then(({ body }) => {
                 assert.deepEqual(body, winonaRyder);
@@ -56,6 +77,7 @@ describe('Actors API', () => {
     it('get all actors', () => {
         return request  
             .get('/api/actors')
+            .set('Authorization', token)
             .then(checkOk)
             .then(({ body }) => {
                 assert.deepEqual(body, [winonaRyder, donJohnson]);
@@ -66,6 +88,7 @@ describe('Actors API', () => {
         winonaRyder.pob = 'kleptoland';
         return request
             .put(`/api/actors/${winonaRyder._id}`)
+            .set('Authorization', token)
             .send(winonaRyder)
             .then(checkOk)
             .then(() => {

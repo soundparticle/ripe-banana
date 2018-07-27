@@ -7,6 +7,7 @@ describe('Reviews API', () => {
     
     beforeEach(() => dropCollection('reviews'));
     beforeEach(() => dropCollection('reviewers'));
+    beforeEach(() => dropCollection('actors'));
 
     let token;
     let tyrone;
@@ -28,27 +29,12 @@ describe('Reviews API', () => {
             });
     });
     
-    
-    // OLD CODE
-    // let chip;
     let amazing, horrible;
     let winonaRyder, donJohnson;
     let universal;
     let dracula, machete;
 
-    //*** save reviewer function ***
-
-    // function saveReviewer(reviewer) {
-    //     return request
-    //         .post('/api/reviewers')
-    //         // .set('Authorization', token)
-    //         .send(reviewer)
-    //         .then(checkOk)
-    //         .then(({ body }) => body);
-    // }
-
     //*** save film function ***
-
     function saveFilm(film) {
         return request
             .post('/api/films')
@@ -148,22 +134,6 @@ describe('Reviews API', () => {
             .then(data => machete = data);
     });
 
-    // beforeEach(() => {
-    //     return saveReviewer({
-    //         name: 'Tyrone Payton',
-    //         company: 'Fermented Banana'
-    //     })
-    //         .then(data => tyrone = data);
-    // });
-    
-    // beforeEach(() => {
-    //     return saveReviewer({
-    //         name: 'Chip Ellsworth III',
-    //         company: 'Fermented Banana'
-    //     })
-    //         .then(data => chip = data);
-    // });
-
     beforeEach(() => {
         return saveReview({
             rating: 5,
@@ -182,16 +152,6 @@ describe('Reviews API', () => {
         })
             .then(data => horrible = data);
     });
-
-    // beforeEach(() => {
-    //     return saveReview({
-    //         rating: 1,
-    //         reviewer: chip._id,
-    //         review: 'This is horrible',
-    //         film: machete._id
-    //     })
-    //         .then(data => horrible = data);
-    // });
 
     it('saves a review', () => {
         console.log('** amazing._id **', amazing._id);
