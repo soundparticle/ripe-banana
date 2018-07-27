@@ -3,7 +3,7 @@ const request = require('./request');
 const { dropCollection } = require('./db');
 const { checkOk } = request;
 
-describe.only('Actors API', () => {
+describe('Actors API', () => {
 
     beforeEach(() => dropCollection('actors'));
     beforeEach(() => dropCollection('reviewers'));
@@ -21,7 +21,7 @@ describe.only('Actors API', () => {
             })
             .then(checkOk)
             .then(({ body }) => {
-                console.log('** body **', body);
+                // console.log('** body **', body);
                 token = body.token;
             });
     });
@@ -60,7 +60,6 @@ describe.only('Actors API', () => {
     });
 
     it('saves an actor', () => {
-        console.log('** winona **', winonaRyder);
         assert.isOk(winonaRyder._id);
     });
 

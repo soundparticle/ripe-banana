@@ -3,16 +3,17 @@ const request = require('./request');
 const { dropCollection } = require('./db');
 const { checkOk, simplify } = request;
 
-describe.skip('Films API', () => {
+describe.only('Films API', () => {
     
     beforeEach(() => {
         dropCollection('films');
         dropCollection('studios');
         dropCollection('actors');
+        dropCollection('reviewers');
     });
 
     let token;
-    let tyrone;
+    // let tyrone;
     beforeEach(() => {
         return request
             .post('/api/auth/signup')
@@ -26,17 +27,17 @@ describe.skip('Films API', () => {
             .then(checkOk)
             .then(({ body }) => {
                 token = body.token;
-                tyrone = body.reviewer;
+                // tyrone = body.reviewer;
             });
     });
 
-    // function saveFilm(film) {
-    //     return request
-    //         .post('/api/films')
-    //         .send(film)
-    //         .then(checkOk)
-    //         .then(({ body }) => body);
-    // }
+    function saveFilm(film) {
+        return request
+            .post('/api/films')
+            .send(film)
+            .then(checkOk)
+            .then(({ body }) => body);
+    }
 
     function saveStudio(studio) {
         return request
@@ -85,32 +86,32 @@ describe.skip('Films API', () => {
     });
     let donJohnson;
 
-    // beforeEach(() => {
-    //     return saveActor({
-    //         name: 'Don Johnson',
-    //         dob: new Date(1949, 11, 15),
-    //         pob: 'MO'
-    //     })
-    //         .then(data => {
-    //             donJohnson = data;
-    //         });
-    // }); 
+    beforeEach(() => {
+        return saveActor({
+            name: 'Don Johnson',
+            dob: new Date(1949, 11, 15),
+            pob: 'MO'
+        })
+            .then(data => {
+                donJohnson = data;
+            });
+    }); 
 
-    // let dracula;
+    let dracula;
     let machete;
     
-    // beforeEach(() => {
-    //     return saveFilm({ 
-    //         title: 'Dracula',
-    //         studio: universal._id,
-    //         released: 1992,
-    //         cast: [{
-    //             role: 'Mina Harker',
-    //             actor: winonaRyder._id
-    //         }]
-    //     })
-    //         .then(data => dracula = data);
-    // });
+    beforeEach(() => {
+        return saveFilm({ 
+            title: 'Dracula',
+            studio: universal._id,
+            released: 1992,
+            cast: [{
+                role: 'Mina Harker',
+                actor: winonaRyder._id
+            }]
+        })
+            .then(data => dracula = data);
+    });
 
     beforeEach(() => {
         return saveFilm({ 
@@ -122,27 +123,28 @@ describe.skip('Films API', () => {
                 actor: donJohnson._id
             }]
         })
-            .then(data =>
-                machete = data);
+            .then(data => machete = data);
     });
 
     it('saves a film', () => {
         assert.isOk(machete._id);
     });
 
-    // it('get a film by id', () => {
-    //     return request
-    //         .get(`/api/films/${dracula._id}`)
-    //         .then(checkOk)
-    //         .then(({ body }) => {
-    //             assert.equal(body.studio.name, 'Universal');
-    //             assert.equal(body.cast[0].actor.name, 'Winona Ryder');
-    //         });
-    // });
+    it('get a film by id', () => {
+        return request
+            .get(`/api/films/${dracula._id}`)
+            .set('Authorization', token)
+            .then(checkOk)
+            .then(({ body }) => {
+                assert.equal(body.studio.name, 'Universal');
+                assert.equal(body.cast[0].actor.name, 'Winona Ryder');
+            });
+    });
 
-    it.skip('gets all films', () => {
+    it('gets all films', () => {
         return request
             .get('/api/films')
+            .set('Authorization', token)
             .then(checkOk) 
             .then(({ body }) => {
                 body.forEach(e => {
@@ -171,7 +173,6 @@ describe.skip('Films API', () => {
                     studio: simplify(universal)
                 };
                 
-
                 assert.deepEqual(body, [dracula, machete]);
             });    
     });
@@ -179,6 +180,7 @@ describe.skip('Films API', () => {
     it('deletes a film', () => {
         return request
             .delete(`/api/films/${machete._id}`)
+            .set('Authorization', token)
             .then(checkOk)
             .then(res => {
                 assert.deepEqual(res.body, { removed: true });

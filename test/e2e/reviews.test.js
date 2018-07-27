@@ -23,7 +23,6 @@ describe('Reviews API', () => {
             })
             .then(checkOk)
             .then(({ body }) => {
-                console.log('** body **', body);
                 token = body.token;
                 tyrone = body.reviewer;
             });
@@ -154,7 +153,6 @@ describe('Reviews API', () => {
     });
 
     it('saves a review', () => {
-        console.log('** amazing._id **', amazing._id);
         assert.isOk(amazing._id);
         assert.isOk(horrible._id);
     });
