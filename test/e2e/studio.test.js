@@ -19,6 +19,8 @@ describe('Studios API', () => {
 
                 email: 'tyrone@banana.com',
                 password: 'abc123',
+                roles: []
+
             })
             .then(checkOk)
             .then(({ body }) => {
