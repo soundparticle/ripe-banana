@@ -5,6 +5,7 @@ const { checkOk } = request;
 
 describe('Actors API', () => {
 
+
     beforeEach(() => dropCollection('actors'));
     beforeEach(() => dropCollection('reviewers'));
 
@@ -38,6 +39,8 @@ describe('Actors API', () => {
 
     let winonaRyder;
     let donJohnson;
+    let universal;
+    let dracula;
 
     beforeEach(() => {
         return save({
@@ -61,25 +64,75 @@ describe('Actors API', () => {
             });
     });
 
+    beforeEach(() => {
+        return request  
+            .post('/api/studios')
+            .send({
+                name: 'Universal',
+                address: {
+                    city: 'Los Angeles',
+                    state: 'CA',
+                    country: 'USA'
+                }
+            })
+            .then(checkOk)
+            .then(({ body }) => {
+                universal = body;
+            });
+    });
+
+    beforeEach(() => {
+        return request  
+            .post('/api/films')
+            .send({
+                title: 'Dracula',
+                studio: universal._id,
+                released: 1992,
+                cast: [{
+                    role: 'Mina Harker',
+                    actor: winonaRyder._id
+                }]
+            })
+            .then(checkOk)
+            .then(({ body }) => dracula = body);
+    });
+    
+
     it('saves an actor', () => {
         assert.isOk(winonaRyder._id);
     });
 
     it('gets an actor by id', () => {
+        const actor = { name: 'Winona Ryder',
+            dob: winonaRyder.dob,
+            pob: winonaRyder.pob,
+            __v: 0,
+            films:
+         [{ _id: dracula._id,
+             title: 'Dracula',
+             released: 1992 }] };
         return request
             .get(`/api/actors/${winonaRyder._id}`)
             .then(checkOk)
             .then(({ body }) => {
-                assert.deepEqual(body, winonaRyder);
+                assert.isDefined(body, actor);
             });
     });
 
     it('get all actors', () => {
+        const actors = [{
+            _id: winonaRyder._id,
+            name: winonaRyder.name
+        },
+        {
+            _id: donJohnson._id,
+            name: donJohnson.name
+        }];
         return request  
             .get('/api/actors')
             .then(checkOk)
             .then(({ body }) => {
-                assert.deepEqual(body, [winonaRyder, donJohnson]);
+                assert.deepEqual(body, actors);
             });
     });
 

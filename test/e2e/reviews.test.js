@@ -161,12 +161,6 @@ describe('Reviews API', () => {
             .get('/api/reviews')
             .then(checkOk)
             .then(({ body }) => {
-                body.forEach(e => {
-                    delete e.__v;
-                    delete e.updated_at;
-                    delete e.created_at;
-                });
-                
                 amazing = {
                     _id: amazing._id,
                     rating: amazing.rating,
