@@ -7,6 +7,26 @@ const { checkOk } = request;
 describe('Studios API', () => {
 
     beforeEach(() => dropCollection('studios'));
+    beforeEach(() => dropCollection('reviewers'));
+
+    let token;
+    beforeEach(() => {
+        return request
+            .post('/api/auth/signup')
+            .send({
+                name: 'Tyrone Payton',
+                company: 'Fermented Banana',
+
+                email: 'tyrone@banana.com',
+                password: 'abc123',
+            })
+            .then(checkOk)
+            .then(({ body }) => {
+                // console.log('** body **', body);
+                token = body.token;
+            });
+    });
+
 
     function save(studio) {
         return request
@@ -54,6 +74,7 @@ describe('Studios API', () => {
     it('gets a studio by id', () => {
         return request
             .get(`/api/studios/${universal._id}`)
+            .set('Authorization', token)
             .then(checkOk)
             .then(({ body }) => {
                 assert.deepEqual(body, universal);
@@ -63,6 +84,7 @@ describe('Studios API', () => {
     it('get all studios', () => {
         return request
             .get('/api/studios')
+            .set('Authorization', token)
             .then(checkOk)
             .then(({ body }) => {
                 assert.deepEqual(body, [universal, paramount]);
@@ -72,6 +94,7 @@ describe('Studios API', () => {
     it('deletes a studio', () => {
         return request
             .delete(`/api/studios/${universal._id}`)
+            .set('Authorization', token)
             .then(checkOk)
             .then(res => {
                 assert.deepEqual(res.body, { removed: true });
