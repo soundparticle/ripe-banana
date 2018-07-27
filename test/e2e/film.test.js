@@ -13,7 +13,6 @@ describe('Films API', () => {
     });
 
     let token;
-    // let tyrone;
     beforeEach(() => {
         return request
             .post('/api/auth/signup')
@@ -29,7 +28,6 @@ describe('Films API', () => {
             .then(checkOk)
             .then(({ body }) => {
                 token = body.token;
-                // tyrone = body.reviewer;
             });
     });
 
@@ -59,7 +57,6 @@ describe('Films API', () => {
             .then(checkOk)
             .then(({ body }) => body);
     }
-    // Save a studio and then an actor
 
     let universal;
 

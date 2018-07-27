@@ -24,7 +24,6 @@ describe('Studios API', () => {
             })
             .then(checkOk)
             .then(({ body }) => {
-                // console.log('** body **', body);
                 token = body.token;
             });
     });

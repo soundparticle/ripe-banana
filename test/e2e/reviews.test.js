@@ -46,7 +46,6 @@ describe('Reviews API', () => {
     }
 
     //*** save review function ***
-
     function saveReview(review) {
         return request
             .post('/api/reviews')
@@ -57,7 +56,6 @@ describe('Reviews API', () => {
     }
 
     //*** save actor function
-
     function saveActor(actor) {
         return request
             .post('/api/actors')
@@ -68,7 +66,6 @@ describe('Reviews API', () => {
     }
 
     //*** save a studio function
-
     function saveStudio(studio) {
         return request
             .post('/api/studios')

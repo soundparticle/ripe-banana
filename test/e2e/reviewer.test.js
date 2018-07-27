@@ -7,7 +7,6 @@ describe('Reviewer API', () => {
 
     beforeEach(() => dropCollection('reviewers'));
    
-    
     let token;
     let tyrone;
     beforeEach(() => {
@@ -33,9 +32,7 @@ describe('Reviewer API', () => {
         assert.isDefined(token);
     });
 
-
     it('saves a reviewer', () => {
-        // assert.isOk(chip._id);
         assert.isOk(tyrone._id);
     });
 

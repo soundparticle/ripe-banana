@@ -17,7 +17,6 @@ describe('Reviewer model', () => {
 
         const json = chip.toJSON();
         delete json._id;
-        // assert.deepEqual(json, data);
         
         assert.equal(chip.email, data.email);
         assert.isUndefined(chip.password, 'password should not be set');

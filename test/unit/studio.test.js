@@ -27,5 +27,4 @@ describe('Studio model', () => {
         const errors = getErrors(studio.validateSync(), 1);
         assert.equal(errors.name.kind, 'required');
     });
-
 });
