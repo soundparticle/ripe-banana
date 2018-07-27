@@ -19,54 +19,19 @@ describe('Reviewer API', () => {
 
                 email: 'tyrone@banana.com',
                 password: 'abc123',
-                roles: []
+                roles: ['admin']
             })
             .then(checkOk)
             .then(({ body }) => {
                 token = body.token;
                 tyrone = body.reviewer;
+                console.log('** token **', token);
             });
     });
 
     it('signs up a user', () => {
         assert.isDefined(token);
     });
-
-    // old tests
-    // function save(reviewer) {
-    //     return request
-    //         .post('/api/reviewers')
-    //         .set('Authorization', token)
-    //         .send(reviewer)
-    //         .then(checkOk)
-    //         .then(({ body }) => body);
-    // }
-
-    // let tyrone;
-    // let chip;
-
-    // beforeEach(() => {
-    //     return save({
-    //         name: 'Tyrone Payton',
-    //         company: 'Fermented Banana',
-
-    //         email: 'tyrone@banana.com',
-    //         password: 'abc123',
-    //     })
-    //         .then(data => tyrone = data);
-    // });
-
-    // beforeEach(() => {
-    //     return save({
-    //         name: 'Chip Ellsworth III',
-    //         company: 'Fermented Banana',
-            
-    //         email: 'chip@banana.com',
-    //         password: 'abc123',
-            
-    //     })
-    //         .then(data => chip = data);
-    // });
 
 
     it('saves a reviewer', () => {
@@ -77,7 +42,6 @@ describe('Reviewer API', () => {
     it('gets a reviewer by id', () => {
         return request
             .get(`/api/reviewers/${tyrone._id}`)
-            .set('Authorization', token)
             .then(checkOk)
             .then(({ body }) => {
                 assert.deepEqual(body, tyrone);
@@ -87,7 +51,6 @@ describe('Reviewer API', () => {
     it('gets all reviewers', () => {
         return request
             .get('/api/reviewers')
-            .set('Authorization', token)
             .then(checkOk)
             .then(({ body }) => {
                 assert.deepEqual(body, [tyrone]);

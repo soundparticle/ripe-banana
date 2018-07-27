@@ -20,7 +20,7 @@ describe('Reviews API', () => {
 
                 email: 'tyrone@banana.com',
                 password: 'abc123',
-                roles: []
+                roles: ['admin']
 
             })
             .then(checkOk)

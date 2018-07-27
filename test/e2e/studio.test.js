@@ -19,7 +19,7 @@ describe('Studios API', () => {
 
                 email: 'tyrone@banana.com',
                 password: 'abc123',
-                roles: []
+                roles: ['admin']
 
             })
             .then(checkOk)
@@ -33,6 +33,7 @@ describe('Studios API', () => {
     function save(studio) {
         return request
             .post('/api/studios')
+            .set('Authorization', token)
             .send(studio)
             .then(checkOk)
             .then(({ body }) => body);
@@ -76,7 +77,6 @@ describe('Studios API', () => {
     it('gets a studio by id', () => {
         return request
             .get(`/api/studios/${universal._id}`)
-            .set('Authorization', token)
             .then(checkOk)
             .then(({ body }) => {
                 assert.deepEqual(body, universal);
@@ -86,7 +86,6 @@ describe('Studios API', () => {
     it('get all studios', () => {
         return request
             .get('/api/studios')
-            .set('Authorization', token)
             .then(checkOk)
             .then(({ body }) => {
                 assert.deepEqual(body, [universal, paramount]);

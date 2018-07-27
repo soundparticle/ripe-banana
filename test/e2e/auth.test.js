@@ -17,7 +17,7 @@ describe('Auth API', () => {
                 company: 'Fermented Banana',
                 email: 'chip@banana.com',
                 password: 'abc123',
-                roles: []
+                roles: ['admin']
 
             })
             .then(checkOk)

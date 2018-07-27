@@ -11,7 +11,7 @@ describe('Reviewer model', () => {
             
             email: 'chip@banana.com',
             password:'abc123',
-            roles: [],
+            roles: ['admin'],
         };
         const chip = new Reviewer(data);
 

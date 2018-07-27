@@ -18,7 +18,7 @@ describe('Actors API', () => {
 
                 email: 'tyrone@banana.com',
                 password: 'abc123',
-                roles: []
+                roles: ['admin']
 
             })
             .then(checkOk)
@@ -31,6 +31,7 @@ describe('Actors API', () => {
     function save(actor) {
         return request
             .post('/api/actors')
+            .set('Authorization', token)
             .send(actor)
             .then(checkOk)
             .then(({ body }) => body);
@@ -68,7 +69,6 @@ describe('Actors API', () => {
     it('gets an actor by id', () => {
         return request
             .get(`/api/actors/${winonaRyder._id}`)
-            .set('Authorization', token)
             .then(checkOk)
             .then(({ body }) => {
                 assert.deepEqual(body, winonaRyder);
@@ -78,7 +78,6 @@ describe('Actors API', () => {
     it('get all actors', () => {
         return request  
             .get('/api/actors')
-            .set('Authorization', token)
             .then(checkOk)
             .then(({ body }) => {
                 assert.deepEqual(body, [winonaRyder, donJohnson]);
@@ -100,6 +99,7 @@ describe('Actors API', () => {
     it('deletes an actor', () => {
         return request
             .delete(`/api/actors/${donJohnson._id}`)
+            .set('Authorization', token)
             .then(checkOk)
             .then(res => {
                 assert.deepEqual(res.body, { removed: true });

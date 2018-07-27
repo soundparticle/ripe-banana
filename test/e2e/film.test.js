@@ -23,7 +23,7 @@ describe('Films API', () => {
 
                 email: 'tyrone@banana.com',
                 password: 'abc123',
-                roles: []
+                roles: ['admin']
 
             })
             .then(checkOk)
@@ -36,6 +36,7 @@ describe('Films API', () => {
     function saveFilm(film) {
         return request
             .post('/api/films')
+            .set('Authorization', token)
             .send(film)
             .then(checkOk)
             .then(({ body }) => body);
@@ -44,6 +45,7 @@ describe('Films API', () => {
     function saveStudio(studio) {
         return request
             .post('/api/studios')
+            .set('Authorization', token)
             .send(studio)
             .then(checkOk)
             .then(({ body }) => body);
@@ -52,6 +54,7 @@ describe('Films API', () => {
     function saveActor(actor) {
         return request
             .post('/api/actors')
+            .set('Authorization', token)
             .send(actor)
             .then(checkOk)
             .then(({ body }) => body);
