@@ -70,7 +70,7 @@ describe('Actors API', () => {
             .get(`/api/actors/${winonaRyder._id}`)
             .then(checkOk)
             .then(({ body }) => {
-                assert.deepEqual(body, winonaRyder);
+                assert.deepEqual(body._id, winonaRyder._id);
             });
     });
 
@@ -79,10 +79,11 @@ describe('Actors API', () => {
             .get('/api/actors')
             .then(checkOk)
             .then(({ body }) => {
-                assert.deepEqual(body, [winonaRyder, donJohnson]);
+                // console.log('*** body ***', body);
+                assert.deepEqual(body.map(b => b._id), [winonaRyder._id, donJohnson._id]);
             });
+    
     });
-
     it('updates an actor', () => {
         winonaRyder.pob = 'kleptoland';
         return request
