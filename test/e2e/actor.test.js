@@ -3,10 +3,13 @@ const request = require('./request');
 const { dropCollection } = require('./db');
 const { checkOk } = request;
 
-describe('Actors API', () => {
+describe.only('Actors API', () => {
 
     beforeEach(() => dropCollection('actors'));
     beforeEach(() => dropCollection('reviewers'));
+    beforeEach(() => dropCollection('films'));
+    beforeEach(() => dropCollection('studios'));
+
 
     let token;
     beforeEach(() => {
@@ -27,6 +30,15 @@ describe('Actors API', () => {
             });
     });
 
+    function saveStudio(studio) {
+        return request
+            .post('/api/studios')
+            .set('Authorization', token)
+            .send(studio)
+            .then(checkOk)
+            .then(({ body }) => body);
+    }
+
     function save(actor) {
         return request
             .post('/api/actors')
@@ -36,8 +48,47 @@ describe('Actors API', () => {
             .then(({ body }) => body);
     }
 
+    function saveFilm(film) {
+        return request
+            .post('/api/films')
+            .set('Authorization', token)
+            .send(film)
+            .then(checkOk)
+            .then(({ body }) => body);
+    }
+    
+    let universal;
+    let dracula;
     let winonaRyder;
     let donJohnson;
+
+    beforeEach(() => {
+        return saveFilm({ 
+            title: 'Dracula',
+            studio: universal._id,
+            released: 1992,
+            cast: [{
+                role: 'Mina Harker',
+                actor: winonaRyder._id
+            }]
+        })
+            .then(data => dracula = data);
+    });
+
+
+    beforeEach(() => {
+        return saveStudio({
+            name: 'Universal',
+            address: {
+                city: 'Los Angeles',
+                state: 'CA',
+                country: 'USA'
+            }
+        })
+            .then(data => {
+                universal = data;
+            });
+    });
 
     beforeEach(() => {
         return save({
@@ -49,7 +100,7 @@ describe('Actors API', () => {
                 winonaRyder = data;
             });
     });
-
+        
     beforeEach(() => {
         return save({
             name:'Don Johnson',
@@ -60,11 +111,48 @@ describe('Actors API', () => {
                 donJohnson = data;
             });
     });
-
+        
+    beforeEach(() => {
+        return request  
+            .post('/api/studios')
+            .send({
+                name: 'Universal',
+                address: {
+                    city: 'Los Angeles',
+                    state: 'CA',
+                    country: 'USA'
+                }
+            })
+            .then(checkOk)
+            .then(({ body }) => {
+                universal = body;
+            });
+    });
+        
+    beforeEach(() => {
+        return request  
+            .post('/api/films')
+            .send({
+                title: 'Dracula',
+                studio: universal._id,
+                released: 1992,
+                cast: [{
+                    role: 'Mina Harker',
+                    actor: winonaRyder._id
+                }]
+            })
+            .then(checkOk)
+            .then(({ body }) => dracula = body);
+    });
+        
     it('saves an actor', () => {
         assert.isOk(winonaRyder._id);
     });
-
+        
+    it('saves a film', () => {
+        assert.isOk(dracula._id);
+    });
+        
     it('gets an actor by id', () => {
         return request
             .get(`/api/actors/${winonaRyder._id}`)
@@ -80,7 +168,7 @@ describe('Actors API', () => {
             .then(checkOk)
             .then(({ body }) => {
                 // console.log('*** body ***', body);
-                assert.deepEqual(body.map(b => b._id), [winonaRyder._id, donJohnson._id]);
+                assert.deepEqual(body, [winonaRyder, donJohnson]);
             });
     
     });
