@@ -19,11 +19,9 @@ describe('Films API', () => {
             .send({
                 name: 'Tyrone Payton',
                 company: 'Fermented Banana',
-
                 email: 'tyrone@banana.com',
                 password: 'abc123',
                 roles: ['admin']
-
             })
             .then(checkOk)
             .then(({ body }) => {
@@ -152,6 +150,7 @@ describe('Films API', () => {
                 body.forEach(e => {
                     delete e.__v;
                 });
+                
                 dracula = {
                     _id: dracula._id,
                     title: dracula.title,

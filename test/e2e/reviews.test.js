@@ -21,7 +21,6 @@ describe('Reviews API', () => {
                 email: 'tyrone@banana.com',
                 password: 'abc123',
                 roles: ['admin']
-
             })
             .then(checkOk)
             .then(({ body }) => {
@@ -35,7 +34,6 @@ describe('Reviews API', () => {
     let universal;
     let dracula, machete;
 
-    //*** save film function ***
     function saveFilm(film) {
         return request
             .post('/api/films')
@@ -45,7 +43,6 @@ describe('Reviews API', () => {
             .then(({ body }) => body);
     }
 
-    //*** save review function ***
     function saveReview(review) {
         return request
             .post('/api/reviews')
@@ -55,7 +52,6 @@ describe('Reviews API', () => {
             .then(({ body }) => body);
     }
 
-    //*** save actor function
     function saveActor(actor) {
         return request
             .post('/api/actors')
@@ -65,7 +61,6 @@ describe('Reviews API', () => {
             .then(({ body }) => body);
     }
 
-    //*** save a studio function
     function saveStudio(studio) {
         return request
             .post('/api/studios')
@@ -161,6 +156,7 @@ describe('Reviews API', () => {
             .get('/api/reviews')
             .then(checkOk)
             .then(({ body }) => {
+
                 amazing = {
                     _id: amazing._id,
                     rating: amazing.rating,

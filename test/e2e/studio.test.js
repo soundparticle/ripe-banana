@@ -1,7 +1,6 @@
 const { assert } = require('chai');
 const request = require('./request');
 const { dropCollection  } = require('./db');
-
 const { checkOk } = request;
 
 describe('Studios API', () => {
@@ -16,11 +15,9 @@ describe('Studios API', () => {
             .send({
                 name: 'Tyrone Payton',
                 company: 'Fermented Banana',
-
                 email: 'tyrone@banana.com',
                 password: 'abc123',
                 roles: ['admin']
-
             })
             .then(checkOk)
             .then(({ body }) => {

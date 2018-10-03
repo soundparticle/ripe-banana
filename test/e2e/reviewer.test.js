@@ -21,7 +21,6 @@ describe('Reviewer API', () => {
             .send({
                 name: 'Tyrone Payton',
                 company: 'Fermented Banana',
-
                 email: 'tyrone@banana.com',
                 password: 'abc123',
                 roles: ['admin']
@@ -88,7 +87,6 @@ describe('Reviewer API', () => {
             }
         })
             .then(data => universal = data);
-
     });
 
     beforeEach(() => {
@@ -130,7 +128,6 @@ describe('Reviewer API', () => {
             _id: tyrone._id,
             name: 'Tyrone Payton',
             company: 'Fermented Banana',
-
             email: 'tyrone@banana.com',
             password: 'abc123',
             roles: ['admin'],
@@ -147,7 +144,6 @@ describe('Reviewer API', () => {
             .get(`/api/reviewers/${tyrone._id}`)
             .then(checkOk)
             .then(({ body }) => {
-                // console.log('*** body ***', body);
                 assert.deepEqual(body._id, reviewer._id);
             });
     });

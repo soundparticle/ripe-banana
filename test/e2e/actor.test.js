@@ -10,7 +10,6 @@ describe.only('Actors API', () => {
     beforeEach(() => dropCollection('films'));
     beforeEach(() => dropCollection('studios'));
 
-
     let token;
     beforeEach(() => {
         return request
@@ -18,11 +17,9 @@ describe.only('Actors API', () => {
             .send({
                 name: 'Tyrone Payton',
                 company: 'Fermented Banana',
-
                 email: 'tyrone@banana.com',
                 password: 'abc123',
                 roles: ['admin']
-
             })
             .then(checkOk)
             .then(({ body }) => {
@@ -167,11 +164,10 @@ describe.only('Actors API', () => {
             .get('/api/actors')
             .then(checkOk)
             .then(({ body }) => {
-                // console.log('*** body ***', body);
                 assert.deepEqual(body, [winonaRyder, donJohnson]);
             });
-    
     });
+    
     it('updates an actor', () => {
         winonaRyder.pob = 'kleptoland';
         return request

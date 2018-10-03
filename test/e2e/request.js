@@ -10,7 +10,6 @@ request.checkOk = res => {
     if(res.status !== 200) {
         throw new Error('expected 200 http status code');
     }
-
     return res;
 };
 
